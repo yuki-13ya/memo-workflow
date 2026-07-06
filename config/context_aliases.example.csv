@@ -1,0 +1,5 @@
+canonical_name,aliases,related_names,ticktick_list_name,category_hint,flags_hint,active,notes
+Client A,client a;example client a,,Client A,work,task_hint,true,Example work client
+Client B,client b;example client b,,Client B,work,task_hint,true,Example work client
+Community A,community a;example community,,Community A,work,task_hint,true,Example community context
+Personal,home;family;personal,,Personal,personal,schedule_related;health_or_care,true,Example personal context

@@ -1,0 +1,90 @@
+# Discordメモ取得ワークフロー
+
+Discordに雑に投げ込んだメモを取得し、原文を維持したまま整理して、Notion向けの記録データと `ticktick-task` 向けのTODO候補データへ分岐させるための小規模自動化プロジェクトです。
+
+## 基本方針
+
+このプロジェクトでは、実装をPhase単位で区切り、確認できたこと、未確認のこと、未実装のことを分けて管理します。
+
+Phase 1では、Discord投稿を読み取り専用で取得し、Markdown / JSONとして保存します。
+
+Phase 2では、Phase 1のJSONを入力にし、原文を維持したままトピック分類します。
+
+Phase 2の分類結果は、後続で2つのルートに分岐します。
+
+- Notionルート
+- TODO候補ルート
+
+Notionルートでは、雑文、記録、考えたこと、日報的な内容、添付メモなどを、Notionで見返しやすい形に整えます。
+
+TODO候補ルートでは、Discord雑文からタスク候補になりそうな内容だけを抽出し、`ticktick-task` 側が受け取れるTODO候補JSONとして出力します。
+
+`memo-workflow` 側では、TickTick APIへの登録、更新、削除を行いません。
+TickTickへの登録、既存TickTickタスクとの統合判定、人間確認CSV、OK済み候補の反映、作業ブロック化、作業ブロック用タスク出力は `ticktick-task` 側の責務として扱います。
+
+認証情報やトークンはプロジェクトフォルダ内に保存しません。必要な環境変数名だけを `.env.example` に記載します。
+
+## 主要文書
+
+| ファイル | 役割 |
+|---|---|
+| `AGENTS.md` | Codexがこのプロジェクト内で作業するときのルール |
+| `docs/document-index.md` | 文書の役割、配置、参照ルール |
+| `docs/app_policy.md` | 設計、AI利用、外部連携、認証情報管理の上位方針 |
+| `docs/system_design.md` | プロジェクト全体の設計図 |
+| `docs/development_roadmap.md` | Phase構成と各Phaseの境界 |
+| `docs/issues.md` | 未解決事項、確認事項、判断待ち |
+| `docs/phase1_discord_ingest.md` | Phase 1: Discord投稿取得の詳細仕様 |
+| `docs/discord_unprocessed_queue_spec.md` | Discord投稿を未処理キューで管理する追加仕様 |
+| `docs/phase2_topic_classification.md` | Phase 2: 原文維持のトピック分類仕様 |
+| `docs/phase5_ticktick_todo_candidates.md` | Phase 5: `ticktick-task` 向けTODO候補JSON生成の設計仕様 |
+| `docs/phase5_todo_candidate_json_spec.md` | Phase 5: TODO候補JSONの出力仕様 |
+| `docs/phase5_ticktick_task_handoff.md` | Phase 5出力を `ticktick-task` 側へ渡すときの申し送り |
+| `context-alias-editor/` | `config/context_aliases.csv` を編集するローカルUI |
+| `docs/change-log.md` | 仕様変更や判断変更の記録 |
+| `.env.example` | 必要な環境変数名の一覧 |
+
+## フォルダ構成
+
+```text
+memo-workflow/
+├─ README.md
+├─ AGENTS.md
+├─ .env.example
+├─ .gitignore
+├─ docs/
+│  ├─ document-index.md
+│  ├─ app_policy.md
+│  ├─ system_design.md
+│  ├─ development_roadmap.md
+│  ├─ issues.md
+│  ├─ change-log.md
+│  ├─ phase1_discord_ingest.md
+│  └─ phase2_topic_classification.md
+├─ discord-ingest/
+├─ phase5-todo-candidates/
+├─ outputs/
+└─ logs/
+```
+
+## 実行手順の入口
+
+Phase構成、Phaseごとの対象範囲、各Phaseの完了条件は `docs/development_roadmap.md` を参照します。
+
+Phase固有の仕様、環境変数、出力形式、ログ方針、例外時の扱いは、対象Phaseの仕様書を参照します。
+
+Phase 5のTODO候補JSON生成は `python phase5-todo-candidates/export_todo_candidates.py --date YYYY-MM-DD` から実行します。
+
+Discord未処理キューから後続Phase向けのバッチJSONを作る場合は `python discord-ingest/queue_batch.py export-pending` を使います。
+詳細は `docs/discord_unprocessed_queue_spec.md` を参照します。
+
+文脈ラベル辞書の編集UIは `run_context_alias_editor.cmd` から起動します。
+起動後、ブラウザで `http://127.0.0.1:8788/` を開きます。
+
+プロジェクト全体の流れ、NotionルートとTODO候補ルートの分岐、`memo-workflow` と `ticktick-task` の責務分担は `docs/system_design.md` を参照します。
+
+Codexで作業する場合のルールは `AGENTS.md` を参照します。
+
+未解決事項、確認事項、判断待ちは `docs/issues.md` を参照します。
+
+仕様変更や判断変更の経緯は `docs/change-log.md` を参照します。

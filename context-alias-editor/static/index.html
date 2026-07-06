@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Context Alias Editor</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>Context Alias Editor</h1>
+          <p id="dictionaryPath">config/context_aliases.csv</p>
+        </div>
+        <div class="topbar-actions">
+          <input id="searchInput" type="search" placeholder="Search">
+          <button id="newButton" type="button">New</button>
+          <button id="reloadButton" type="button">Reload</button>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <aside class="list-pane">
+          <div class="list-meta">
+            <span id="rowCount">0 rows</span>
+            <span id="statusText"></span>
+          </div>
+          <div id="aliasList" class="alias-list"></div>
+        </aside>
+
+        <section class="editor-pane">
+          <form id="aliasForm">
+            <input id="rowId" type="hidden">
+
+            <label>
+              <span>canonical_name</span>
+              <input id="canonicalName" name="canonical_name" required>
+            </label>
+
+            <label>
+              <span>aliases</span>
+              <textarea id="aliases" name="aliases" rows="3"></textarea>
+            </label>
+
+            <label>
+              <span>related_names</span>
+              <textarea id="relatedNames" name="related_names" rows="3"></textarea>
+            </label>
+
+            <div class="field-grid">
+              <label>
+                <span>ticktick_list_name</span>
+                <input id="ticktickListName" name="ticktick_list_name">
+              </label>
+
+              <label>
+                <span>category_hint</span>
+                <select id="categoryHint" name="category_hint"></select>
+              </label>
+            </div>
+
+            <fieldset>
+              <legend>flags_hint</legend>
+              <div id="flagChoices" class="flag-grid"></div>
+            </fieldset>
+
+            <label class="switch-row">
+              <input id="active" name="active" type="checkbox" checked>
+              <span>active</span>
+            </label>
+
+            <label>
+              <span>notes</span>
+              <textarea id="notes" name="notes" rows="4"></textarea>
+            </label>
+
+            <footer class="form-actions">
+              <button id="saveButton" type="submit">Save</button>
+              <button id="deleteButton" type="button" class="danger">Delete</button>
+            </footer>
+          </form>
+        </section>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
