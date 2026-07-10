@@ -15,6 +15,25 @@
 
 単なる誤字修正や表記整理は、必要に応じて記録します。
 
+## 2026-07-10
+
+### TickTickリスト名の辞書反映方針を未解決事項へ追加
+
+- 対象ファイル:
+  - `docs/issues.md`
+  - `docs/context_alias_registration_interface_note.md`
+  - `docs/change-log.md`
+- 変更内容:
+  - TickTickから取得した既存リスト名を、`config/context_aliases.csv` の `ticktick_list_name` へどう反映するかを未解決事項として追加した
+  - TickTickリスト名の読み取りは `ticktick-task` 側、文脈ラベル辞書への反映は `memo-workflow` 側、レビューUIへ渡す共有候補は親 `handoff/ticktick_list_names.json` とする方針を明記した
+- 変更理由:
+  - `ticktick-task` のレビューUIは `handoff/ticktick_list_names.json` を候補として読むが、その元になる辞書へTickTick既存リスト名を取り込む運用が未定義だったため
+- 影響範囲:
+  - 文書のみ。辞書編集UI、Phase 2分類、Phase 5 TODO候補生成、TickTick API連携のコード挙動は変更なし
+- 未確認事項:
+  - TickTick取得リストと `context_aliases.csv` の差分確認方法
+  - `handoff/ticktick_list_names.json` の生成または更新手順
+
 ## 2026-07-05
 
 ### Phase 5の長文TODO抽出重複を修正

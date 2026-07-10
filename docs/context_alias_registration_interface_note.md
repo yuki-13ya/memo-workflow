@@ -81,6 +81,12 @@ AIは辞書候補を出すだけに留めます。
 `ticktick_list_name` は慎重に扱います。
 TickTick側の既存リスト名と完全一致できる場合だけ設定し、曖昧なものは空欄または保留にします。
 
+TickTickから既存リスト名を読み取る処理は、TickTick APIを扱う `ticktick-task` 側の責務です。
+
+読み取ったリスト名は、そのまま全件を `context_aliases.csv` へ追加しません。文脈ラベル、別名、関連名と結びつけて後続分類に使う意味があるものだけ、人間確認後に `ticktick_list_name` へ反映します。
+
+`ticktick-task` 側のレビューUIへ渡す候補ファイルは、親 `handoff/ticktick_list_names.json` とします。このファイルは、`context_aliases.csv` の `ticktick_list_name` から生成または更新する共有候補であり、実リスト名を含むためGit管理しません。
+
 ## 段階的な実装案
 
 最初から本格的なUIやDBを作りません。
@@ -143,6 +149,8 @@ ticktick_list_name: []
 - 既存ラベルの検索方法
 - 類似候補をAIに出させるか、Python側の文字列照合に留めるか
 - 辞書更新後にPhase 2を自動再実行するか、手動にするか
+- TickTickから取得した既存リスト名を、どの確認画面または差分ファイルで `ticktick_list_name` へ反映するか
+- `context_aliases.csv` から `handoff/ticktick_list_names.json` を生成または更新する手順をどこに置くか
 
 ## 現時点の判断
 
