@@ -73,7 +73,9 @@ Phase構成、Phaseごとの対象範囲、各Phaseの完了条件は `docs/deve
 
 Phase固有の仕様、環境変数、出力形式、ログ方針、例外時の扱いは、対象Phaseの仕様書を参照します。
 
-Phase 5のTODO候補JSON生成は `python phase5-todo-candidates/export_todo_candidates.py --date YYYY-MM-DD` から実行します。
+Phase 5のTODO候補JSON生成は `python phase5-todo-candidates/export_todo_candidates.py --date YYYY-MM-DD --use-ai` から実行します。
+`--use-ai` は自由文からTODO候補を抽出、分解する主経路です。
+`--use-ai` を付けない場合はローカル抽出の退避経路として動きますが、抽出品質確認の正規経路としては扱いません。
 
 Discord未処理キューから後続Phase向けのバッチJSONを作る場合は `python discord-ingest/queue_batch.py export-pending` を使います。
 詳細は `docs/discord_unprocessed_queue_spec.md` を参照します。

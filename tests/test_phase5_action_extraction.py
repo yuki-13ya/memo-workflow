@@ -122,6 +122,94 @@ class Phase5ActionExtractionTest(unittest.TestCase):
         )
         self.assertEqual(len(set(titles)), len(titles))
 
+    def test_ai_result_builds_reviewable_candidates(self) -> None:
+        source_data = {
+            "target_date": "2026-07-12",
+            "topics": [
+                {
+                    "topic_id": "topic-001",
+                    "topic_title": "サポートLINEと請求のやること",
+                    "category": "work",
+                    "flags": ["task_hint", "money_related"],
+                    "confidence": "high",
+                    "context_label": "株式会社ハウスブリッジ",
+                    "context_match_status": "alias_matched",
+                    "messages": [
+                        {
+                            "message_id": "message-1",
+                            "created_at_local": "2026-07-12T20:00:00+09:00",
+                            "content": "やること\n今泉さんのサポートLINEを作る\nハウスブリッジの請求書送る",
+                            "attachments": [],
+                        }
+                    ],
+                }
+            ],
+        }
+        ai_result = {
+            "items": [
+                {
+                    "topic_id": "topic-001",
+                    "message_ids": ["message-1"],
+                    "source_title": "サポートLINEを作る",
+                    "source_text": "今泉さんのサポートLINEを作る",
+                    "initial_status": "todo_candidate",
+                    "proposed_title": "今泉さんのサポートLINEを作る",
+                    "proposed_items": [],
+                    "estimated_minutes_candidate": 60,
+                    "needs_review": False,
+                    "review_reason": None,
+                    "blocking_hint": [],
+                    "context_label": "株式会社ハウスブリッジ",
+                    "context_label_status": "alias_matched",
+                    "category": "work",
+                    "flags": ["task_hint"],
+                },
+                {
+                    "topic_id": "topic-001",
+                    "message_ids": ["message-1"],
+                    "source_title": "請求書を送る",
+                    "source_text": "ハウスブリッジの請求書送る",
+                    "initial_status": "todo_candidate",
+                    "proposed_title": "ハウスブリッジの請求書を送る",
+                    "proposed_items": [],
+                    "estimated_minutes_candidate": 15,
+                    "needs_review": True,
+                    "review_reason": "請求に関係するため確認が必要。",
+                    "blocking_hint": ["money_related"],
+                    "context_label": "株式会社ハウスブリッジ",
+                    "context_label_status": "alias_matched",
+                    "category": "work",
+                    "flags": ["task_hint", "money_related"],
+                },
+            ],
+            "warnings": [],
+        }
+
+        output, warnings = phase5.build_output_from_ai(
+            source_data,
+            Path("topic_classification_queue_batch.json"),
+            "2026-07-12",
+            "2026-07-12T00:00:00+00:00",
+            False,
+            [],
+            ai_result,
+        )
+
+        titles = [item["proposedTitle"] for item in output["items"]]
+
+        self.assertEqual(warnings, [])
+        self.assertEqual(
+            titles,
+            [
+                "株式会社ハウスブリッジ: 今泉さんのサポートLINEを作る",
+                "株式会社ハウスブリッジ: ハウスブリッジの請求書を送る",
+            ],
+        )
+        self.assertEqual(output["summary"]["totalItems"], 2)
+        self.assertEqual(output["items"][0]["sourceContext"]["extractionMode"], "ai_free_text")
+        self.assertTrue(output["items"][1]["needsReview"])
+        self.assertIn("money_related", output["items"][1]["blockingHint"])
+
 
 if __name__ == "__main__":
     unittest.main()
