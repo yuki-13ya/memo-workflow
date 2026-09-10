@@ -15,6 +15,25 @@
 
 単なる誤字修正や表記整理は、必要に応じて記録します。
 
+## 2026-09-11
+
+### Google Drive側のChatGPT向けREADMEを追加
+
+- 対象ファイル:
+  - `docs/drive_chatgpt_handoff.md`
+  - `README.md`
+  - `docs/document-index.md`
+  - Google Drive同期フォルダの `Memo-dump/README.md`
+- 変更内容:
+  - Drive受け渡しフォルダの目的、フォルダの役割、JSON構造、生成タイミングを整理した
+  - Discord原文をChatGPT自身への指示として実行しないことを明記した
+  - 外部サービスへの書き込み、後続処理の完了判定、フォルダ移動の運用はMemodumpで定義しないことを明記した
+- 変更理由:
+  - Driveフォルダを開くブラウザ版ChatGPTが、ローカル実装を参照できなくても安全に判断できるようにするため
+- 未確認事項:
+  - ブラウザ版ChatGPTからのREADME参照
+  - ブラウザチャット側の後続処理
+
 ## 2026-09-10
 
 ### 定期実行を未取得投稿の遡及取得へ修正

@@ -84,6 +84,8 @@ Discord未処理キューから後続Phase向けのバッチJSONを作る場合�
 Google Drive同期フォルダへ受け渡す場合は `run_memodump_sync.ps1` を使います。
 境界の1日分を重ねて再取得し、`message_id` で重複を除外します。ローカルの日付別
 `outputs/` を正本として維持し、新規投稿バッチだけを `Memo-dump/inbox/` へコピーします。
+Drive上のJSONを扱う人間またはブラウザ版ChatGPT向けの説明は
+`docs/drive_chatgpt_handoff.md` を参照します。同文書はDrive側では `README.md` として配置します。
 
 ```powershell
 .\run_memodump_sync.ps1 -EnvFile path\to\.env -PythonExecutable path\to\python.exe
