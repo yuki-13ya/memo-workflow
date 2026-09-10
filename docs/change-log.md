@@ -15,6 +15,36 @@
 
 単なる誤字修正や表記整理は、必要に応じて記録します。
 
+## 2026-09-10
+
+### Google Drive同期フォルダへのJSON受け渡しを追加
+
+- 対象ファイル:
+  - `discord-ingest/publish_drive_handoff.py`
+  - `run_memodump_sync.ps1`
+  - `register_memodump_tasks.ps1`
+  - `tests/test_publish_drive_handoff.py`
+  - `README.md`
+  - `docs/document-index.md`
+  - `docs/change-log.md`
+- 変更内容:
+  - Discord取得とキュー更新が成功した後、完成済みの日付別JSONだけをGoogle Drive同期フォルダの `Memo-dump/inbox` へコピーする入口を追加した
+  - 投稿内容の安定ハッシュを `state/drive_handoff_state.json` に記録し、同じ内容を再実行した場合はコピーしないようにした
+  - 対象日の投稿が0件の場合は `inbox` へコピーしないようにした
+  - 同日中に投稿が増えた場合は、既存ファイルを上書きせず、新しい時刻付きファイルとしてコピーするようにした
+  - コピー途中のファイルをChatGPTが読まないよう、一時ファイルへのコピー後に確定名へ置き換えるようにした
+  - ログオン時と毎日20時に、ログオン中のユーザーとして一連処理を起動するタスク登録スクリプトを追加した
+- 変更理由:
+  - Notion API転記をローカル実装せず、Google Drive上のJSONをChatGPTへ安全に受け渡すため
+  - ローカル出力を正本として残し、Drive同期停止時にもDiscord取得結果を失わないため
+- 影響範囲:
+  - Discord取得後のGoogle Drive受け渡しのみ
+  - Notion書き込み、ChatGPT側の処理済み移動、既存のPhase 2 / Phase 5処理は変更しない
+- 未確認事項:
+  - 実際のDiscord API取得を含む一連実行
+  - Google Drive for desktopでの同期完了
+  - Windowsタスクスケジューラによる次回の自動実行
+
 ## 2026-08-02
 
 ### 未決定事項と仕様の扱いを作業ルールへ明記

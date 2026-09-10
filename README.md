@@ -80,6 +80,28 @@ Phase 5のTODO候補JSON生成は `python phase5-todo-candidates/export_todo_can
 Discord未処理キューから後続Phase向けのバッチJSONを作る場合は `python discord-ingest/queue_batch.py export-pending` を使います。
 詳細は `docs/discord_unprocessed_queue_spec.md` を参照します。
 
+Discord取得後、完成した日付別JSONをGoogle Drive同期フォルダへ受け渡す場合は
+`run_memodump_sync.ps1` を使います。ローカルの `outputs/` を正本として維持し、
+内容が前回と変わった場合だけ `Memo-dump/inbox/` へ一意な名前でコピーします。
+
+```powershell
+.\run_memodump_sync.ps1 -EnvFile path\to\.env -PythonExecutable path\to\python.exe
+```
+
+タスクスケジューラでは、認証情報を引数へ直接書かず、外部 `.env` のパスと
+Python実行ファイルをこのスクリプトへ渡します。
+
+現在のPCへログオン時と毎日20時のトリガーを登録する場合は、
+`register_memodump_tasks.ps1` を実行します。Drive for desktopを利用できるよう、
+タスクはログオン中のユーザーとして動作します。
+
+```powershell
+.\register_memodump_tasks.ps1 `
+  -EnvFile path\to\.env `
+  -PythonExecutable path\to\python.exe `
+  -DriveInbox path\to\Memo-dump\inbox
+```
+
 文脈ラベル辞書の編集UIは `run_context_alias_editor.cmd` から起動します。
 起動後、ブラウザで `http://127.0.0.1:8788/` を開きます。
 
