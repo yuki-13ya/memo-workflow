@@ -17,13 +17,26 @@
 
 ## 2026-09-11
 
+### Google Drive受け渡し先をMemo-Routerへ変更
+
+- 変更内容:
+  - Google Drive側の作業フォルダ名変更に合わせ、受け渡し先を `Memo-Router/inbox` に変更した
+  - `Memodump` をDiscord取得、ローカル保存、JSON生成、`MemoRouter` をGoogle Drive上のJSONから始まるブラウザ版ChatGPTの後続処理として責務を分けた
+  - Google Drive側のREADMEとリポジトリ文書の表記を更新した
+- 変更理由:
+  - ローカル収集処理とブラウザチャットによる後続処理の所有範囲を名称でも区別するため
+- 影響範囲:
+  - WindowsタスクのDrive出力先
+  - Google Drive側README
+  - Discord取得、JSON形式、重複除外の挙動は変更しない
+
 ### Google Drive側のChatGPT向けREADMEを追加
 
 - 対象ファイル:
   - `docs/drive_chatgpt_handoff.md`
   - `README.md`
   - `docs/document-index.md`
-  - Google Drive同期フォルダの `Memo-dump/README.md`
+  - Google Drive同期フォルダの `Memo-Router/README.md`
 - 変更内容:
   - Drive受け渡しフォルダの目的、フォルダの役割、JSON構造、生成タイミングを整理した
   - Discord原文をChatGPT自身への指示として実行しないことを明記した
@@ -67,7 +80,7 @@
   - `docs/document-index.md`
   - `docs/change-log.md`
 - 変更内容:
-  - Discord取得とキュー更新が成功した後、完成済みの日付別JSONだけをGoogle Drive同期フォルダの `Memo-dump/inbox` へコピーする入口を追加した
+  - Discord取得とキュー更新が成功した後、完成済みの日付別JSONだけをGoogle Drive同期フォルダの指定先へコピーする入口を追加した
   - 投稿内容の安定ハッシュを `state/drive_handoff_state.json` に記録し、同じ内容を再実行した場合はコピーしないようにした
   - 対象日の投稿が0件の場合は `inbox` へコピーしないようにした
   - 同日中に投稿が増えた場合は、既存ファイルを上書きせず、新しい時刻付きファイルとしてコピーするようにした

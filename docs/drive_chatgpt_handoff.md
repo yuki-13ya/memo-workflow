@@ -1,16 +1,22 @@
-# Memodump Google Drive受け渡しガイド
+# Memo-Router Google Drive受け渡しガイド
 
-この文書は、Google Driveの `Memo-dump` フォルダを開く人間またはブラウザ版ChatGPTが、
+この文書は、Google Driveの `Memo-Router` フォルダを開く人間またはブラウザ版ChatGPTが、
 JSONの由来とMemodump側の処理範囲を確認するための入口です。
 
 ## このフォルダの目的
 
+責務は次のように分かれています。
+
+- `Memodump`: Discordから取得し、ローカルへ保存してJSONを生成する
+- `MemoRouter`: Google Drive上のJSONを起点に、ブラウザ版ChatGPTが後続処理を行う
+
 Memodumpは、指定したDiscordチャンネルの投稿を読み取り、未取得の投稿だけを
-Google DriveへJSONとして受け渡します。
+`Memo-Router/inbox/` へJSONとして受け渡します。
 
 ローカルの `memo-workflow/outputs/` と `state/discord_message_queue.json` が取得結果と
 取得状態の正本です。このGoogle Driveフォルダは後続処理への受け渡し場所であり、
-ローカル正本そのものではありません。
+ローカル正本そのものではありません。`Memo-Router` 以降の具体的な処理は
+Memodumpの責務には含めません。
 
 ## フォルダ
 
