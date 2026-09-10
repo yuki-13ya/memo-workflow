@@ -25,18 +25,20 @@ if ([string]::IsNullOrWhiteSpace($PythonExecutable)) {
 
 Push-Location $ProjectDir
 try {
-    $IngestResultText = (& $PythonExecutable 'discord-ingest\ingest_discord.py' `
+    $IngestResultText = (& $PythonExecutable 'discord-ingest\catch_up_discord.py' `
         --env-file $EnvFile `
-        --merge-existing `
-        --update-queue | Out-String)
+        --queue-path 'state\discord_message_queue.json' | Out-String)
     if ($LASTEXITCODE -ne 0) {
         throw "Discord ingest failed with exit code $LASTEXITCODE"
     }
     Write-Output $IngestResultText.Trim()
 
     $IngestResult = $IngestResultText | ConvertFrom-Json
-    $TargetDate = $IngestResult.target_date
-    $SourceJson = Join-Path $ProjectDir "outputs\discord_messages_$TargetDate.json"
+    if ([string]::IsNullOrWhiteSpace($IngestResult.batch_path)) {
+        Write-Output 'drive_handoff=skipped reason=no_new_messages'
+        return
+    }
+    $SourceJson = Join-Path $ProjectDir $IngestResult.batch_path
 
     & $PythonExecutable 'discord-ingest\publish_drive_handoff.py' `
         --source $SourceJson `

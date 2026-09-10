@@ -269,8 +269,23 @@ def check_auth(token: str) -> None:
 def fetch_messages_for_date(
     config: Config, local_tz: ZoneInfo, max_pages: int, logger: logging.Logger
 ) -> list[dict[str, Any]]:
-    start_local = datetime.combine(config.target_date, time.min, tzinfo=local_tz)
-    end_exclusive_local = start_local + timedelta(days=1)
+    return fetch_messages_for_range(
+        config, local_tz, config.target_date, config.target_date, max_pages, logger
+    )
+
+
+def fetch_messages_for_range(
+    config: Config,
+    local_tz: ZoneInfo,
+    start_date: date,
+    end_date: date,
+    max_pages: int,
+    logger: logging.Logger,
+) -> list[dict[str, Any]]:
+    if start_date > end_date:
+        raise IngestError("date_extract", "start date must not be after end date")
+    start_local = datetime.combine(start_date, time.min, tzinfo=local_tz)
+    end_exclusive_local = datetime.combine(end_date + timedelta(days=1), time.min, tzinfo=local_tz)
     start_utc = start_local.astimezone(timezone.utc)
     end_utc = end_exclusive_local.astimezone(timezone.utc)
 

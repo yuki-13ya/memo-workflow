@@ -26,6 +26,7 @@
 | `run_context_alias_editor.cmd` / `run_context_alias_editor.ps1` | 文脈ラベル辞書編集UIのWindows用起動ファイル。既定URLは `http://127.0.0.1:8788/` | 起動方法やポートを変えたとき |
 | `discord-ingest/queue_batch.py` | Discord未処理キューから後続Phase向けバッチJSONを出力し、TODO候補化済み状態を明示更新するCLI | 未処理キューの受け渡し方法を変えたとき |
 | `discord-ingest/publish_drive_handoff.py` | 完成したDiscord取得JSONをGoogle Drive同期フォルダへ重複なくコピーするCLI | ChatGPTへの受け渡し方法を変えたとき |
+| `discord-ingest/catch_up_discord.py` | キューの最終取得位置からDiscord投稿を遡及取得し、新規投稿バッチを作るCLI | 未取得投稿の回収範囲を変えたとき |
 | `run_memodump_sync.ps1` | Discord取得、キュー更新、Drive同期フォルダへの受け渡しを順に実行するWindows用入口 | 定期実行方法や保存先を変えたとき |
 | `register_memodump_tasks.ps1` | ログオン時と毎日20時のWindowsタスクを登録する管理用スクリプト | タスク名、トリガー、実行条件を変えたとき |
 | `.env.example` | 必要な環境変数名の一覧 | 必要な設定項目が変わったとき |

@@ -17,6 +17,26 @@
 
 ## 2026-09-10
 
+### 定期実行を未取得投稿の遡及取得へ修正
+
+- 対象ファイル:
+  - `discord-ingest/ingest_discord.py`
+  - `discord-ingest/catch_up_discord.py`
+  - `run_memodump_sync.ps1`
+  - `tests/test_catch_up_discord.py`
+  - `README.md`
+  - `docs/document-index.md`
+- 変更内容:
+  - キュー内の最新 `createdAt` の前日から当日までを一度に取得する処理を追加した
+  - 境界付近は再取得し、既存キューの `message_id` と照合して新規投稿だけを受け渡しバッチへ出力するようにした
+  - 期間内の日付別JSONは従来どおり更新し、新規投稿が0件ならDriveへ何も渡さないようにした
+  - Windows定期実行の入口を当日取得から遡及取得へ切り替えた
+- 変更理由:
+  - 数日または長期間実行できなかった場合も、Discord投稿を取りこぼさないという既存仕様に実装を合わせるため
+- 未確認事項:
+  - 実Discord APIによる長期間の初回遡及取得
+  - Windowsタスクスケジューラによる次回の自動実行
+
 ### Google Drive同期フォルダへのJSON受け渡しを追加
 
 - 対象ファイル:

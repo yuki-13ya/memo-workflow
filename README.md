@@ -80,9 +80,10 @@ Phase 5のTODO候補JSON生成は `python phase5-todo-candidates/export_todo_can
 Discord未処理キューから後続Phase向けのバッチJSONを作る場合は `python discord-ingest/queue_batch.py export-pending` を使います。
 詳細は `docs/discord_unprocessed_queue_spec.md` を参照します。
 
-Discord取得後、完成した日付別JSONをGoogle Drive同期フォルダへ受け渡す場合は
-`run_memodump_sync.ps1` を使います。ローカルの `outputs/` を正本として維持し、
-内容が前回と変わった場合だけ `Memo-dump/inbox/` へ一意な名前でコピーします。
+未処理キューの最終取得位置からDiscord投稿を遡及取得し、新しく見つかった投稿だけを
+Google Drive同期フォルダへ受け渡す場合は `run_memodump_sync.ps1` を使います。
+境界の1日分を重ねて再取得し、`message_id` で重複を除外します。ローカルの日付別
+`outputs/` を正本として維持し、新規投稿バッチだけを `Memo-dump/inbox/` へコピーします。
 
 ```powershell
 .\run_memodump_sync.ps1 -EnvFile path\to\.env -PythonExecutable path\to\python.exe
