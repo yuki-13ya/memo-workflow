@@ -30,6 +30,7 @@
 | `docs/drive_chatgpt_handoff.md` | Google Drive上のJSONをブラウザ版ChatGPTが安全にNotionへ受け渡すための入口 | Driveフォルダ運用、JSON、Notion受け渡し規則を変えたとき |
 | `run_memodump_sync.ps1` | Discord取得、キュー更新、Drive同期フォルダへの受け渡しを順に実行するWindows用入口 | 定期実行方法や保存先を変えたとき |
 | `register_memodump_tasks.ps1` | ログオン時と毎日20時のWindowsタスクを登録する管理用スクリプト | タスク名、トリガー、実行条件を変えたとき |
+| `run_memodump_sync_ui.cmd` / `show_memodump_sync_ui.ps1` | 登録済みMemodumpタスクを任意のタイミングで起動し、完了結果とinboxを確認するWindows UI | 手動同期UIや表示内容を変えたとき |
 | `.env.example` | 必要な環境変数名の一覧 | 必要な設定項目が変わったとき |
 
 ## 今後作成する文書
