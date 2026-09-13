@@ -166,7 +166,7 @@ $setupButton.Add_Click({
     $pythonDialog.Filter = 'Python (python.exe)|python.exe|実行ファイル (*.exe)|*.exe'
     $bundledPython = 'C:\Users\Namba\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe'
     if (Test-Path -LiteralPath $bundledPython -PathType Leaf) {
-        $pythonDialog.InitialDirectory = Split-Path -LiteralPath $bundledPython -Parent
+        $pythonDialog.InitialDirectory = [System.IO.Path]::GetDirectoryName($bundledPython)
         $pythonDialog.FileName = 'python.exe'
     }
     if ($pythonDialog.ShowDialog() -ne [System.Windows.Forms.DialogResult]::OK) {

@@ -19,7 +19,7 @@ if ([string]::IsNullOrWhiteSpace($DriveInbox)) {
 if (-not (Test-Path -LiteralPath $DriveInbox -PathType Container)) {
     throw "DriveInbox was not found: $DriveInbox"
 }
-$DriveRoot = Split-Path -LiteralPath $DriveInbox -Parent
+$DriveRoot = [System.IO.Path]::GetDirectoryName($DriveInbox)
 $AttachmentRoot = Join-Path $DriveRoot 'attachments'
 if (-not (Test-Path -LiteralPath $AttachmentRoot -PathType Container)) {
     throw "AttachmentRoot was not found: $AttachmentRoot"
