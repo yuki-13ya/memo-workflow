@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$TaskName = 'Memodump Discord to Drive'
 )
 
