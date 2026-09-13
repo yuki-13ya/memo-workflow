@@ -63,6 +63,15 @@ def parse_args() -> argparse.Namespace:
         help="Directory for Markdown and JSON output files.",
     )
     parser.add_argument(
+        "--attachment-root",
+        type=Path,
+        help=(
+            "Root directory for downloaded attachments. Files are stored as "
+            "<message_id>/<original_filename>. Defaults to the legacy "
+            "<output-dir>/attachments/<target-date> layout when omitted."
+        ),
+    )
+    parser.add_argument(
         "--log-dir",
         type=Path,
         default=Path("logs"),
@@ -358,17 +367,30 @@ def download_attachment(url: str, destination: Path) -> None:
 
 
 def download_supported_attachments(
-    records: list[dict[str, Any]], output_dir: Path, target_date: str, logger: logging.Logger
+    records: list[dict[str, Any]],
+    output_dir: Path,
+    target_date: str,
+    logger: logging.Logger,
+    attachment_root: Path | None = None,
 ) -> None:
-    attachment_dir = output_dir / "attachments" / target_date
     for message in records:
+        message_id = str(message["message_id"])
+        attachment_dir = (
+            attachment_root / message_id
+            if attachment_root is not None
+            else output_dir / "attachments" / target_date
+        )
         for attachment in message.get("attachments", []):
             if attachment.get("download_status") != "pending":
                 continue
 
             filename = safe_filename(attachment.get("filename", "attachment"))
             attachment_id = attachment.get("attachment_id") or "attachment"
-            local_path = attachment_dir / f"{message['message_id']}_{attachment_id}_{filename}"
+            local_path = (
+                attachment_dir / filename
+                if attachment_root is not None
+                else attachment_dir / f"{message_id}_{attachment_id}_{filename}"
+            )
             if local_path.exists():
                 attachment["download_status"] = "already_exists"
                 attachment["local_path"] = str(local_path)
@@ -680,7 +702,11 @@ def main() -> int:
             log_info(logger, "output_save", "dry run enabled; outputs were not saved")
         else:
             download_supported_attachments(
-                records, args.output_dir, config.target_date.isoformat(), logger
+                records,
+                args.output_dir,
+                config.target_date.isoformat(),
+                logger,
+                args.attachment_root,
             )
         payload = build_payload(config, channel, records)
         merge_summary = {

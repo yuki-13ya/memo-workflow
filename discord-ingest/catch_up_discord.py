@@ -17,6 +17,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Catch up Discord messages since the last fetch.")
     parser.add_argument("--env-file", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, default=Path("outputs"))
+    parser.add_argument(
+        "--attachment-root",
+        type=Path,
+        help="Root directory for <message_id>/<original_filename> attachments.",
+    )
     parser.add_argument("--log-dir", type=Path, default=Path("logs"))
     parser.add_argument("--queue-path", type=Path, default=Path("state/discord_message_queue.json"))
     parser.add_argument("--initial-from", type=date.fromisoformat)
@@ -69,7 +74,13 @@ def main() -> int:
 
         for local_date, date_records in sorted(by_date.items()):
             target_date = date.fromisoformat(local_date)
-            ingest.download_supported_attachments(date_records, args.output_dir, local_date, logger)
+            ingest.download_supported_attachments(
+                date_records,
+                args.output_dir,
+                local_date,
+                logger,
+                args.attachment_root,
+            )
             payload = payload_for_date(config, channel, date_records, target_date)
             json_path = args.output_dir / f"discord_messages_{local_date}.json"
             existing = ingest.load_json_if_exists(json_path)

@@ -1,5 +1,15 @@
 # 変更履歴
 
+## 2026-09-12
+
+### Memo-Router向け添付保存構造を追加
+
+- Discord添付保存処理に `--attachment-root` を追加した
+- 指定時は `<attachment-root>/<message_id>/<元ファイル名>` に保存し、JSONの `attachments[].local_path` に絶対保存先を残す
+- `run_memodump_sync.ps1` は `Memo-Router/inbox` の兄弟 `attachments` を明示的に渡す
+- オプション未指定時の従来保存構造は互換性のため維持した
+- 添付保存の単体テストを追加し、同一投稿の複数画像が同じ `message_id` フォルダへ入ることを確認した
+
 この文書は、`memo-workflow` プロジェクトの仕様変更、判断変更、読み替えルールを記録します。
 
 ## 記録方針

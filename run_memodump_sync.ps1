@@ -19,6 +19,11 @@ if ([string]::IsNullOrWhiteSpace($DriveInbox)) {
 if (-not (Test-Path -LiteralPath $DriveInbox -PathType Container)) {
     throw "DriveInbox was not found: $DriveInbox"
 }
+$DriveRoot = Split-Path -LiteralPath $DriveInbox -Parent
+$AttachmentRoot = Join-Path $DriveRoot 'attachments'
+if (-not (Test-Path -LiteralPath $AttachmentRoot -PathType Container)) {
+    throw "AttachmentRoot was not found: $AttachmentRoot"
+}
 if ([string]::IsNullOrWhiteSpace($PythonExecutable)) {
     $PythonExecutable = 'python'
 }
@@ -27,6 +32,7 @@ Push-Location $ProjectDir
 try {
     $IngestResultText = (& $PythonExecutable 'discord-ingest\catch_up_discord.py' `
         --env-file $EnvFile `
+        --attachment-root $AttachmentRoot `
         --queue-path 'state\discord_message_queue.json' | Out-String)
     if ($LASTEXITCODE -ne 0) {
         throw "Discord ingest failed with exit code $LASTEXITCODE"

@@ -123,8 +123,9 @@ Discord直添付は、雑メモとして直接投稿されやすい画像、動�
 保存対象外の添付はファイル本体を保存しません。
 JSONには、ファイル名、content type、サイズ、`download_status: "skipped"`、`skip_reason: "unsupported_content_type"` を残します。
 
-同じ日を再実行した場合、同じ保存名の添付ファイルが既にあるものは再ダウンロードしません。
-保存名は `message_id_attachment_id_元ファイル名` とし、既存ファイルは取得済みとして扱います。
+同じ日を再実行した場合、同じ保存先の添付ファイルが既にあるものは再ダウンロードしません。
+通常実行では従来どおり `message_id_attachment_id_元ファイル名` を使用します。
+`--attachment-root` を指定した場合は、`<attachment-root>/<message_id>/<元ファイル名>` に保存し、既存ファイルは取得済みとして扱います。
 添付ファイル本体の上書きや差分判定はPhase 1では行いません。
 
 Google Driveなどの外部リンクは本文内URLとして保存し、リンク先の自動取得やダウンロードは行いません。
@@ -141,6 +142,8 @@ OCR、PDF読解、動画解析、AI分類は後続Phaseで扱います。
 - `outputs/discord_messages_YYYY-MM-DD.md`
 - `outputs/discord_messages_YYYY-MM-DD.json`
 - `outputs/attachments/YYYY-MM-DD/`
+
+定期実行の `run_memodump_sync.ps1` は、指定された `Memo-Router/inbox` の兄弟フォルダ `attachments` を `--attachment-root` として渡します。これにより実運用の保存先は `Memo-Router/attachments/<message_id>/<元ファイル名>` となります。
 
 Markdownは人間が確認しやすい形式、JSONは後続Phaseが機械的に読みやすい形式として扱います。
 
