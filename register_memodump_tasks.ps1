@@ -1,9 +1,10 @@
-param(
+﻿param(
     [string]$DailyAt = '20:00',
     [Parameter(Mandatory = $true)][string]$EnvFile,
     [Parameter(Mandatory = $true)][string]$PythonExecutable,
     [Parameter(Mandatory = $true)][string]$DriveInbox,
-    [string]$TaskName = 'Memodump Discord to Drive'
+    [string]$TaskName = 'Memodump Discord to Drive',
+    [switch]$ValidateOnly
 )
 
 $ErrorActionPreference = 'Stop'
@@ -43,6 +44,18 @@ $Principal = New-ScheduledTaskPrincipal `
     -UserId ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) `
     -LogonType Interactive `
     -RunLevel Limited
+
+if ($ValidateOnly) {
+    [pscustomobject]@{
+        TaskName = $TaskName
+        EnvFile = $EnvFile
+        PythonExecutable = $PythonExecutable
+        DriveInbox = $DriveInbox
+        ActionExecutable = $Action.Execute
+        TriggerCount = $Triggers.Count
+    }
+    return
+}
 
 Register-ScheduledTask `
     -TaskName $TaskName `

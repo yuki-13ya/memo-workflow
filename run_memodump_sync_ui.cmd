@@ -1,3 +1,3 @@
 @echo off
 setlocal
-start "" powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -STA -File "%~dp0show_memodump_sync_ui.ps1"
+wscript.exe "%~dp0run_memodump_sync_ui.vbs"

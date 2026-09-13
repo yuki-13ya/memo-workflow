@@ -185,11 +185,17 @@ $setupButton.Add_Click({
 
     try {
         $registerScript = Join-Path $PSScriptRoot 'register_memodump_tasks.ps1'
-        & $registerScript `
-            -EnvFile $envDialog.FileName `
-            -PythonExecutable $pythonDialog.FileName `
-            -DriveInbox $inboxDialog.SelectedPath `
-            -TaskName $TaskName | Out-Null
+        $registrationOutput = & powershell.exe `
+            -NoProfile `
+            -ExecutionPolicy Bypass `
+            -File $registerScript `
+            -EnvFile ([string]$envDialog.FileName) `
+            -PythonExecutable ([string]$pythonDialog.FileName) `
+            -DriveInbox ([string]$inboxDialog.SelectedPath) `
+            -TaskName ([string]$TaskName) 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            throw (($registrationOutput | Out-String).Trim())
+        }
         $ready = Refresh-TaskConfiguration
         if ($ready) {
             $syncButton.Enabled = $true

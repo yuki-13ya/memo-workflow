@@ -113,6 +113,10 @@ Python実行ファイルをこのスクリプトへ渡します。
 `.env`、Python、`Memo-Router/inbox` を選択すると、ログオン時・毎日20時・今すぐ同期で
 共通利用するタスクを登録できます。
 
+デスクトップショートカットと `.cmd` は `run_memodump_sync_ui.vbs` を経由してUIだけを
+表示します。通常のエラーはUI内へ表示し、UIが開く前に発生した起動エラーだけを
+`logs/memodump_sync_ui_launch.log` へ記録します。
+
 文脈ラベル辞書の編集UIは `run_context_alias_editor.cmd` から起動します。
 起動後、ブラウザで `http://127.0.0.1:8788/` を開きます。
 
