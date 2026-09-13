@@ -250,6 +250,10 @@ $timer.Add_Tick({
 })
 
 $form.Add_Shown({
+    $form.TopMost = $true
+    $form.Activate()
+    $form.BringToFront()
+    $form.TopMost = $false
     $ready = Refresh-TaskConfiguration
     if ($ready) {
         Set-Status -Message '「今すぐ同期」を押すと、新規Discord投稿を確認します。'
