@@ -187,6 +187,7 @@ $setupButton.Add_Click({
         $registerScript = Join-Path $PSScriptRoot 'register_memodump_tasks.ps1'
         $registrationOutput = & powershell.exe `
             -NoProfile `
+            -WindowStyle Hidden `
             -ExecutionPolicy Bypass `
             -File $registerScript `
             -EnvFile ([string]$envDialog.FileName) `

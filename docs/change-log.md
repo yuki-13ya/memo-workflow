@@ -15,6 +15,7 @@
 - Windows PowerShell 5.1で初期設定値を確実に渡すため、登録スクリプト呼び出しを型確定済みの名前付き引数へ変更し、非登録の検証モードを追加する
 - タスク登録処理をUI本体とは別のPowerShellプロセスへ隔離し、登録失敗がWinFormsのJIT例外ダイアログにならないようにする
 - Windows PowerShell 5.1で失敗する `Split-Path -LiteralPath -Parent` を使わず、UIと同期本体の親フォルダ取得を.NET APIへ統一する
+- 初期設定用の子PowerShellと登録済みタスクのPowerShellを非表示実行に統一し、同期中もUIだけを表示する
 
 ## 2026-09-12
 

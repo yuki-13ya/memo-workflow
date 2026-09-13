@@ -24,6 +24,7 @@ $PowerShell = (Get-Command powershell.exe).Source
 $ActionArguments = @(
     '-NoProfile'
     '-NonInteractive'
+    '-WindowStyle Hidden'
     '-ExecutionPolicy Bypass'
     "-File `"$Runner`""
     "-EnvFile `"$EnvFile`""
